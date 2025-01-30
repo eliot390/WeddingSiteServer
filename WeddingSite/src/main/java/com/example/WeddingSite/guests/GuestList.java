@@ -15,9 +15,9 @@ public class GuestList {
   private Boolean valet_request;
   private Boolean plus_one;
   private String guest_name;
-  private String group_pairing;
+  private Integer group_pairing;
 
-  public GuestList(Long guest_id, String full_name, Boolean rsvp_status, Boolean valet_request, Boolean plus_one, String guest_name, String group_pairing) {
+  public GuestList(Long guest_id, String full_name, Boolean rsvp_status, Boolean valet_request, Boolean plus_one, String guest_name, Integer group_pairing) {
     this.guest_id = guest_id;
     this.full_name = full_name;
     this.rsvp_status = rsvp_status;
@@ -27,7 +27,7 @@ public class GuestList {
     this.group_pairing = group_pairing;
   }
 
-  public GuestList(String full_name, Boolean rsvp_status, Boolean valet_request, Boolean plus_one, String guest_name, String group_pairing) {
+  public GuestList(String full_name, Boolean rsvp_status, Boolean valet_request, Boolean plus_one, String guest_name, Integer group_pairing) {
     this.full_name = full_name;
     this.rsvp_status = rsvp_status;
     this.valet_request = valet_request;
@@ -87,11 +87,11 @@ public class GuestList {
     this.guest_name = guest_name;
   }
 
-  public String getGroup_pairing() {
+  public Integer getGroup_pairing() {
     return group_pairing;
   }
 
-  public void setGroup_pairing(String group_pairing) {
+  public void setGroup_pairing(Integer group_pairing) {
     this.group_pairing = group_pairing;
   }
 
