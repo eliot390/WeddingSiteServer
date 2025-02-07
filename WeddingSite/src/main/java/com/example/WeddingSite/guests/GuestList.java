@@ -16,8 +16,18 @@ public class GuestList {
   private Boolean plus_one;
   private String guest_name;
   private Integer group_pairing;
+  private String short_comment;
+  private String song_request;
 
-  public GuestList(Long guest_id, String full_name, Boolean rsvp_status, Boolean valet_request, Boolean plus_one, String guest_name, Integer group_pairing) {
+  public GuestList(Long guest_id,
+                   String full_name,
+                   Boolean rsvp_status,
+                   Boolean valet_request,
+                   Boolean plus_one,
+                   String guest_name,
+                   Integer group_pairing,
+                   String short_comment,
+                   String song_request) {
     this.guest_id = guest_id;
     this.full_name = full_name;
     this.rsvp_status = rsvp_status;
@@ -25,15 +35,26 @@ public class GuestList {
     this.plus_one = plus_one;
     this.guest_name = guest_name;
     this.group_pairing = group_pairing;
+    this.short_comment = short_comment;
+    this.song_request = song_request;
   }
 
-  public GuestList(String full_name, Boolean rsvp_status, Boolean valet_request, Boolean plus_one, String guest_name, Integer group_pairing) {
+  public GuestList(String full_name,
+                   Boolean rsvp_status,
+                   Boolean valet_request,
+                   Boolean plus_one,
+                   String guest_name,
+                   Integer group_pairing,
+                   String short_comment,
+                   String song_request) {
     this.full_name = full_name;
     this.rsvp_status = rsvp_status;
     this.valet_request = valet_request;
     this.plus_one = plus_one;
     this.guest_name = guest_name;
     this.group_pairing = group_pairing;
+    this.short_comment = short_comment;
+    this.song_request = song_request;
   }
 
   public GuestList() {
@@ -93,6 +114,22 @@ public class GuestList {
 
   public void setGroup_pairing(Integer group_pairing) {
     this.group_pairing = group_pairing;
+  }
+
+  public String getShort_comment() {
+    return short_comment;
+  }
+
+  public void setShort_comment(String short_comment) {
+    this.short_comment = short_comment;
+  }
+
+  public String getSong_request() {
+    return song_request;
+  }
+
+  public void setSong_request(String song_request) {
+    this.song_request = song_request;
   }
 
   @Override

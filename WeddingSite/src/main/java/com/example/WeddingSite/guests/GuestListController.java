@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/guests")
+@CrossOrigin(origins = "*")
 public class GuestListController {
 
   private final GuestListService guestListService;
@@ -25,34 +26,46 @@ public class GuestListController {
   @Autowired
   private GuestListRepository guestListRepository;
   @GetMapping("/{guest_id}")
+  /**
+   * http://localhost:8080/api/v1/guests/6
+   * */
   public ResponseEntity<GuestList> getUserById(@PathVariable Long guest_id){
     return guestListRepository.findById(guest_id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
   }
-
-  @PostMapping
-  public void addPlusOne(@RequestBody GuestList guest){
-    guestListService.addNewGuest(guest);
-  }
-
-  @DeleteMapping(path = "{guest_id}")
-  public void deleteGuest(@PathVariable("guest_id") Long guest_id){
-    guestListService.deleteGuest(guest_id);
-  }
-
-  @PutMapping(path = "{guest_id}")
+  @GetMapping("/group/{group_pairing}")
   /**
-   * http://localhost:8080/api/v1/guests/4?rsvp_status=true&valet_request=true&plus_one=true&guest_name=Kevin
-   * @param guest_id
-   * @param rsvp_status
-   * @param valet_request
-   * @param plus_one
-   * @param guest_name
+   * http://localhost:8080/api/v1/guests/group/37
    * */
-  public void updateGuest(@PathVariable("guest_id") Long guest_id,
-                          @RequestParam Boolean rsvp_status,
-                          @RequestParam(required = false) Boolean valet_request,
-                          @RequestParam(required = false) Boolean plus_one,
-                          @RequestParam(required = false) String guest_name){
-    guestListService.updateGuest(guest_id, rsvp_status, valet_request, plus_one, guest_name);
+  public ResponseEntity<List<GuestList>> getUserByPairing(@PathVariable Integer group_pairing){
+    List<GuestList> guests = guestListRepository.findGuestByPairing(group_pairing);
+    return guests.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(guests);
+  }
+  @GetMapping("/name")
+  /**
+   * http://localhost:8080/api/v1/guests/name?full_name=Eliot Pardo
+   * */
+  public ResponseEntity<GuestList> getUserByName(@RequestParam String full_name){
+    return guestListRepository.findGuestByName(full_name).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+  }
+
+  @PutMapping("/{guest_id}")
+  /**
+   * http://localhost:8080/api/v1/guests/7
+   * @params
+   * {
+   *     "rsvp_status": false,
+   *     "valet_request": false,
+   *     "plus_one": true,
+   *     "guest_name": "John Doe"
+   * }
+  * */
+  public ResponseEntity<String> updateGuest(@PathVariable Long guest_id, @RequestBody GuestList request) {
+    boolean updated = guestListService.updateGuest(guest_id, request);
+
+    if(updated){
+      return ResponseEntity.ok("Guest updated successfully.");
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 }

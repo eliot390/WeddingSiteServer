@@ -1,7 +1,11 @@
 package com.example.WeddingSite.guests;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,26 +34,28 @@ public class GuestListService {
   public void deleteGuest(Long guest_id) {
     boolean exists = guestListRepository.existsById(guest_id);
     if(!exists){
-      throw new IllegalStateException("Guest ID '"+guest_id+"' doesn't exist.");
+      throw new IllegalStateException("Guest ID '"+ guest_id +"' doesn't exist.");
     }
     guestListRepository.deleteById(guest_id);
   }
 
-  public void updateGuest(Long guest_id, Boolean rsvp_status, Boolean valet_request, Boolean plus_one, String guest_name) {
-    GuestList guestList = guestListRepository.findById(guest_id).orElseThrow(() -> new IllegalStateException("Guest doesn't exist."));
-    if (rsvp_status != null) {
-      guestList.setRsvp_status(rsvp_status);
-    }
-    if (valet_request != null) {
-      guestList.setValet_request(valet_request);
-    }
-    if (plus_one != null) {
-      guestList.setPlus_one(plus_one);
-    }
-    if (guest_name != null && !guest_name.trim().isEmpty()) {
-      guestList.setGuest_name(guest_name);
-    }
+  public boolean updateGuest(Long guest_id, GuestList request){
+    Optional<GuestList> userByName = guestListRepository.findById(guest_id);
 
-    guestListRepository.save(guestList);
+    if (userByName.isPresent()) {
+      GuestList guest = userByName.get();
+
+      if (request.getRsvp_status() != null) guest.setRsvp_status(request.getRsvp_status());
+      if (request.getValet_request() != null) guest.setValet_request(request.getValet_request());
+      if (request.getPlus_one() != null) guest.setPlus_one(request.getPlus_one());
+      if (request.getGuest_name() != null) guest.setGuest_name(request.getGuest_name());
+      if (request.getGroup_pairing() != null) guest.setGroup_pairing(request.getGroup_pairing());
+      if (request.getShort_comment() != null) guest.setShort_comment(request.getShort_comment());
+      if (request.getSong_request() != null) guest.setSong_request(request.getSong_request());
+
+      guestListRepository.save(guest);
+      return true;
+    }
+    return false;
   }
 }
