@@ -15,4 +15,7 @@ public interface GuestListRepository extends JpaRepository<GuestList, Long> {
 
   @Query("SELECT g FROM GuestList g WHERE g.group_pairing = :group_pairing")
   List<GuestList> findGuestByPairing(@Param("group_pairing") Integer group_pairing);
+
+  @Query("SELECT COUNT(g) FROM GuestList g WHERE g.valet_request = true")
+  int countByValetRequest();
 }

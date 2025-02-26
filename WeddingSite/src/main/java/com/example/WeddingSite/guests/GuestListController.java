@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/v1/guests")
@@ -46,6 +48,11 @@ public class GuestListController {
    * */
   public ResponseEntity<GuestList> getUserByName(@RequestParam String full_name){
     return guestListRepository.findGuestByName(full_name).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+  }
+  @GetMapping("/valet/count")
+  public ResponseEntity<Map<String,Integer>> getValetCount(){
+    int count = guestListRepository.countByValetRequest();
+    return ResponseEntity.ok(Collections.singletonMap("count", count));
   }
 
   @PutMapping("/{guest_id}")
