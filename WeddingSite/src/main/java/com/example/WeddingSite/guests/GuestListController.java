@@ -1,5 +1,6 @@
 package com.example.WeddingSite.guests;
 
+import com.example.WeddingSite.notifications.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,8 @@ public class GuestListController {
     return ResponseEntity.ok(Collections.singletonMap("count", count));
   }
 
+  @Autowired
+  private EmailService emailService;
   @PutMapping("/{guest_id}")
   /**
    * http://localhost:8080/api/v1/guests/7
@@ -70,6 +73,17 @@ public class GuestListController {
     boolean updated = guestListService.updateGuest(guest_id, request);
 
     if(updated){
+      GuestList updatedGuest = guestListRepository.findById(guest_id).orElse(null);
+      String guestName = updatedGuest != null ? updatedGuest.getFull_name() : "Unknown Guest";
+      String status = request.getRsvp_status() ? "Attending" : "Not Attending";
+      String valet = request.getValet_request() ? "Yes" : "No";
+
+      emailService.sendEmail(
+              "chefeliotison@gmail.com",
+              "New RSVP Submission",
+              "New RSVP Submission\n" + guestName + ": " + status + "\nValet: " + valet
+      );
+
       return ResponseEntity.ok("Guest updated successfully.");
     } else {
       return ResponseEntity.notFound().build();
