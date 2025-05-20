@@ -76,12 +76,11 @@ public class GuestListController {
       GuestList updatedGuest = guestListRepository.findById(guest_id).orElse(null);
       String guestName = updatedGuest != null ? updatedGuest.getFull_name() : "Unknown Guest";
       String status = request.getRsvp_status() ? "Attending" : "Not Attending";
-      String valet = request.getValet_request() ? "Yes" : "No";
 
       emailService.sendEmail(
               "chefeliotison@gmail.com",
               "New RSVP Submission",
-              "New RSVP Submission\n" + guestName + ": " + status + "\nValet: " + valet
+              "New RSVP Submission\n" + guestName + ": " + status
       );
 
       return ResponseEntity.ok("Guest updated successfully.");
